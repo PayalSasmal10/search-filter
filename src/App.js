@@ -24,8 +24,9 @@ function App() {
     if(containerRef.current && items[selectedItem]){
       const selectedItemElement = containerRef.current.children[selectedItem];
       selectedItemElement.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
+        behavior: "auto",
+        block: "end",
+        inline: "end"
       });
     }
   };
@@ -45,7 +46,7 @@ function App() {
   
   return (
     <div className="App" >
-      <input type="text" onChange={getTheInputHandler}/>
+      <input type="text" onChange={getTheInputHandler} />
        {inputData && (
         <div ref={containerRef} className="item-container">
         {items.map((item, index) => (
