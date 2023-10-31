@@ -18,3 +18,18 @@ p {
   margin: 10px;
   font-size: 18px;
 }
+
+.firstName{
+  font-weight: 800;
+}
+
+.item-container{
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.selected{
+  background-color: #cce0ff;
+  outline: none;
+  cursor: pointer;
+}

@@ -1,31 +1,60 @@
-import logo from "./logo.svg";
 import "./App.css";
 import JSONDATA from "./MOCK_DATA.json";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function App() {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [inputData, setInputData] = useState("");
+  const [items, setItems] = useState([]);
+  const [selectedItem, setSelectedItem] = useState(0);
+  
+  const containerRef = useRef(null);
 
-  const typingChangeHandler = (event) => {
-    setSearchTerm(event.target.value);
+  const getTheInputHandler = (e) => {
+    setInputData(e.target.value);
+   
   };
 
+  useEffect(() => {
+    const data = JSONDATA.filter((item) => item.first_name.toLowerCase().startsWith((inputData.toLowerCase())));
+    setItems(data);
+    console.log("data", data);
+  }, [inputData])
+  
+  const  scrollSelectedItemIntoView = () => {
+    if(containerRef.current && items[selectedItem]){
+      const selectedItemElement = containerRef.current.children[selectedItem];
+      selectedItemElement.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    }
+  };
+  const handleByKey = (e) => {
+    if(e.key === 'ArrowUp' && selectedItem>0){
+      console.log("arrowUp");
+      setSelectedItem(selectedItem - 1);
+      scrollSelectedItemIntoView();
+    }else if(e.key === 'ArrowDown' && selectedItem < items.length -1){
+      console.log("arrowDown");
+      setSelectedItem(selectedItem + 1);
+      scrollSelectedItemIntoView();
+    }
+  }
+
+
+  
   return (
-    <div className="App">
-      <input type="text" placeholder="search..." onChange={typingChangeHandler}/>
-      {JSONDATA.filter((val) => {
-        if(searchTerm === ""){
-          return val;
-        }else if(val.first_name.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())){
-          return val;
-        }
-      }).map((val, key) => {
-        return (
-          <div className="user">
-            <p>{val.first_name}</p>
-          </div>
-        );
-      })}
+    <div className="App" >
+      <input type="text" onChange={getTheInputHandler}/>
+       {inputData && (
+        <div ref={containerRef} className="item-container">
+        {items.map((item, index) => (
+        <div key={item.id}>
+          <span onKeyDown={handleByKey} tabIndex={0} className={selectedItem === index ? "selected" : "" }>{item.first_name}</span>
+        </div>
+        ))}
+        </div>
+       )}
     </div>
   );
 }
