@@ -35,3 +35,11 @@ p {
   /* outline: none; */
   cursor: pointer;
 }
+
+.items{
+  cursor: pointer;
+}
+.items:hover{
+  background-color: #b4bcc2;  
+}
+

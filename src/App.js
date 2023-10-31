@@ -11,7 +11,9 @@ function App() {
 
   const getTheInputHandler = (e) => {
     setInputData(e.target.value);
-   
+    console.log("selectedItem", selectedItem);
+    setSelectedItem(0);
+
   };
 
   useEffect(() => {
@@ -42,16 +44,24 @@ function App() {
     }
   }
 
+   const selectItemsToInputField = (index) => {
+    setSelectedItem(index)
+    const selectedTextedValue = items[index].first_name;
+    setInputData(selectedTextedValue);
+   }  
 
   
   return (
     <div className="App" >
-      <input type="text" onChange={getTheInputHandler} />
-       {inputData && (
+      <input type="text" onChange={getTheInputHandler} value={inputData}/>
+       {inputData && selectedItem === 0 &&(
         <div ref={containerRef} className="item-container">
         {items.map((item, index) => (
         <div key={item.id}>
-          <span onKeyDown={handleByKey} tabIndex={0} className={selectedItem === index ? "selected" : "" }>{item.first_name}</span>
+          <span onKeyDown={handleByKey} tabIndex={0} className={selectedItem === index ? "selected" : "" }>
+            <span className="items" onClick={() => selectItemsToInputField(index)}>
+            {item.first_name}</span>
+            </span>
         </div>
         ))}
         </div>
